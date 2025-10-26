@@ -13,7 +13,7 @@ namespace Robot_GUI
         private Action tickAction;
 
         public bool ClockSignal { get; private set; } = false;
-        public int Interval_ms { get; private set; } = 1000; // doba půl periody, => 1Hz
+        public int Interval_ms { get; private set; } = 500; // doba půl periody, => 1Hz
         public double Frequency = 1;
 
         public bool IsRunning { get; private set; }

@@ -10,15 +10,13 @@ namespace Robot_GUI
 {
     public class Controller
     {
-        //private const int Gamepad_VendorID = 0x2563; // gembird gamepad
-        private const int Gamepad_VendorID = 0x054C; // ps gamepad
+        private const int Gamepad_VendorID = 0x2563; // gembird gamepad
+        //private const int Gamepad_VendorID = 0x054C; // ps gamepad
         private HidDevice controller;
         public Timer Reconnect_Timer;
 
         private bool[] leftCross = new bool[4];
         private bool[] rightButtons = new bool[4];
-
-        public byte[] Report = new byte[63];
 
         public Controller()
         {
@@ -58,11 +56,6 @@ namespace Robot_GUI
 
         private void Update_Controller_State(HidReport report)
         {
-            for (int i = 0; i < Report.Length; i++)
-            {
-                Report[i] = report.Data[i];
-            }
-
             // in order - TOP - RIGHT - BOTTOM - LEFT
             rightButtons = new[]
             {
@@ -81,9 +74,6 @@ namespace Robot_GUI
             };
         }
 
-        /// <returns>
-        /// Buttons in order [TOP - RIGHT - DOWN - LEFT]
-        /// </returns>
         public bool[] Return_Button_Data()
         {
             // maps Turning_dir=btn_down, Turn_base=btn_left, Engine_main_arm=cross_down, Grabber=cross_left, Arm_grabber=cross_right

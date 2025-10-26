@@ -23,7 +23,7 @@ namespace Robot_GUI
         {
             InitializeComponent();
 
-            //robot = new Robot("PCIE-1730,BID#0", "PCIE-1730_profile.xml");
+            robot = new Robot("PCIE-1730,BID#0", "PCIE-1730_profile.xml", ref Debugger_window);
             //controller = new Controller();
             clock = new Clock(Update_Robot_Inputs);
 
@@ -36,6 +36,11 @@ namespace Robot_GUI
         private void Form_Load(object sender, EventArgs e)
         {
             output.Text = $"Aktuální hodnota na vstupu robota: {0}\r\nInterval: {clock.Interval_ms * 2}ms\r\nFrekvence: {clock.Frequency}Hz";
+        }
+
+        private void Robot_Reset_Position(object sender, EventArgs e)
+        {
+            robot.Reset_Default_Position(clock.Interval_ms);
         }
 
         private void Update_Robot_Inputs()
@@ -58,15 +63,15 @@ namespace Robot_GUI
             //    ret++;
             //}
 
-            Invoke((MethodInvoker)delegate
-                {
-                    Debugger_Robot.OverWrite(Robot.Reset_Default_Position(), ref Debugger_window);
-                });
+            //Invoke((MethodInvoker)delegate
+            //    {
+            //        Debugger_Robot.OverWrite(Robot.Reset_Default_Position(), ref Debugger_window);
+            //    });
 
 
             // výpočet hodnoty k zápisu pomocí stavu vstupů uživatele
             byte input_value = Robot.Get_Next_Input_Value(user_inputs, clock.ClockSignal);
-            input_value = (byte)~(int)input_value;
+            input_value = (byte)~input_value;
             // zápis na výstup IO karty
             //robot.Write_Input(input_value);
             //byte output_value = robot.Read_Output();
@@ -74,7 +79,7 @@ namespace Robot_GUI
             // Update UI
             output.Invoke((MethodInvoker)delegate
             {
-                output.Text = $"Aktuální hodnota na vstupu robota: {input_value}\r\nAktuální hodnota na výstupu robota: {0}\r\nInterval: {clock.Interval_ms * 2}ms\r\nFrekvence: {clock.Frequency}Hz";
+                output.Text = $"Aktuální hodnota na vstupu robota: {robot.Input_value}Aktuální hodnota na výstupu robota: {0}\r\nInterval: {clock.Interval_ms * 2}ms\r\nFrekvence: {clock.Frequency}Hz";
             });
         }
 
@@ -108,7 +113,7 @@ namespace Robot_GUI
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             clock.Dispose();
-            controller.Dispose();
+            //controller.Dispose();
         }
 
     }
