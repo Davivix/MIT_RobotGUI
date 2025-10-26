@@ -85,8 +85,6 @@ namespace Robot_GUI
             leftCross[3],
             leftCross[1],
             };
-
-            
         }
 
         public void Dispose()

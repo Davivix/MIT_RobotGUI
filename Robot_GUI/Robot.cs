@@ -23,18 +23,18 @@ namespace Robot_GUI
         public Robot(string device_description, string profile, ref TextBox debugger_window)
         {
             this.debugger_window = debugger_window;
-            //DeviceInformation ioDevice = new DeviceInformation();
-            //ioDevice.Description = device_description;
-            //ioDevice.DeviceMode = AccessMode.ModeWrite;
+            DeviceInformation ioDevice = new DeviceInformation();
+            ioDevice.Description = device_description;
+            ioDevice.DeviceMode = AccessMode.ModeWrite;
 
-            //IO_Output = new InstantDoCtrl();
-            //IO_Input = new InstantDiCtrl();
+            IO_Output = new InstantDoCtrl();
+            IO_Input = new InstantDiCtrl();
 
-            //IO_Output.SelectedDevice = ioDevice;
-            //IO_Input.SelectedDevice = ioDevice;
+            IO_Output.SelectedDevice = ioDevice;
+            IO_Input.SelectedDevice = ioDevice;
 
-            //IO_Output.LoadProfile(profile);
-            //IO_Input.LoadProfile(profile);
+            IO_Output.LoadProfile(profile);
+            IO_Input.LoadProfile(profile);
         }
 
         public static byte Get_Next_Input_Value(bool[] inputs, bool clock_signal)
@@ -51,21 +51,20 @@ namespace Robot_GUI
 
         public void Write_Input(byte value)
         {
-            Input_value = value;
-            //IO_Output.Write(0, value);
+            IO_Output.Write(0, value);
         }
 
         public byte Read_Output()
         {
-            //IO_Input.Read(0, out byte value);
-            return 0xFF;
+            IO_Input.Read(0, out byte value);
+            return value
         }
 
         public async Task Reset_Default_Position(int clock_interval)
         {
             foreach (Output_BitPost bitpos in Enum.GetValues(typeof(Output_BitPost)))
             {
-                int max_steps = 10;
+                int max_steps = 300;
                 int steps = 0;
 
                 string name = Enum.GetName(typeof(Output_BitPost), bitpos);
@@ -90,7 +89,7 @@ namespace Robot_GUI
                         steps = 0;
                         max_steps *= 2;
 
-                        if (max_steps > 20)
+                        if (max_steps > 600)
                         {
                             Debugger_Robot.Log($"max steps reached, breaking, next motor", ref debugger_window);
                             break;

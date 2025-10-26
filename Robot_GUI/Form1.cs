@@ -24,7 +24,7 @@ namespace Robot_GUI
             InitializeComponent();
 
             robot = new Robot("PCIE-1730,BID#0", "PCIE-1730_profile.xml", ref Debugger_window);
-            //controller = new Controller();
+            controller = new Controller();
             clock = new Clock(Update_Robot_Inputs);
 
             Manual_Inputs = new CheckBox[] { Turning_dir_check, Turn_base_check, Engine_main_arm_check, Grabber_check, Arm_grabber_check };
@@ -52,29 +52,12 @@ namespace Robot_GUI
             else
                 user_inputs = Manual_Inputs.Select(c => c.Checked).ToArray();
 
-            //string debug_value = string.Empty;
-            //int ret = 0;
-            //foreach (byte button in controller.Report)
-            //{
-            //    if (ret % 10 == 0 && ret != 0)
-            //        debug_value += $"{button}\r\n";
-            //    else
-            //        debug_value += $"{button}, ";
-            //    ret++;
-            //}
-
-            //Invoke((MethodInvoker)delegate
-            //    {
-            //        Debugger_Robot.OverWrite(Robot.Reset_Default_Position(), ref Debugger_window);
-            //    });
-
-
             // výpočet hodnoty k zápisu pomocí stavu vstupů uživatele
             byte input_value = Robot.Get_Next_Input_Value(user_inputs, clock.ClockSignal);
             input_value = (byte)~input_value;
             // zápis na výstup IO karty
-            //robot.Write_Input(input_value);
-            //byte output_value = robot.Read_Output();
+            robot.Write_Input(input_value);
+            byte output_value = robot.Read_Output();
 
             // Update UI
             output.Invoke((MethodInvoker)delegate
@@ -113,7 +96,7 @@ namespace Robot_GUI
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             clock.Dispose();
-            //controller.Dispose();
+            controller.Dispose();
         }
 
     }

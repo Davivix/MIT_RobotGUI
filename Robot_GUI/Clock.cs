@@ -40,7 +40,6 @@ namespace Robot_GUI
 
             Frequency = hz;
             Interval_ms = (int)(1000.0 / hz / 2);
-            //Interval_ms = Math.Clamp(Interval_ms, 2, 2000); // 450 Hz => (2,22 / 2) ms, zaokrouhleno na 1, což je více než maximum (500hz), takže clamp na 2
 
             if (IsRunning)
                 timer.Change(0, Interval_ms);
