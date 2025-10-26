@@ -1,0 +1,44 @@
+C:\Users\snajberk.david21\source\repos\Robot_GUI\Robot_GUI\bin\Debug\Robot_GUI.exe.config
+C:\Users\snajberk.david21\source\repos\Robot_GUI\Robot_GUI\bin\Debug\Robot_GUI.exe
+C:\Users\snajberk.david21\source\repos\Robot_GUI\Robot_GUI\bin\Debug\Robot_GUI.pdb
+C:\Users\snajberk.david21\source\repos\Robot_GUI\Robot_GUI\bin\Debug\Automation.BDaq4.dll
+C:\Users\snajberk.david21\source\repos\Robot_GUI\Robot_GUI\bin\Debug\HidLibrary.dll
+C:\Users\snajberk.david21\source\repos\Robot_GUI\Robot_GUI\bin\Debug\HidLibrary.pdb
+C:\Users\snajberk.david21\source\repos\Robot_GUI\Robot_GUI\obj\Debug\Robot_GUI.csproj.AssemblyReference.cache
+C:\Users\snajberk.david21\source\repos\Robot_GUI\Robot_GUI\obj\Debug\Robot_GUI.csproj.SuggestedBindingRedirects.cache
+C:\Users\snajberk.david21\source\repos\Robot_GUI\Robot_GUI\obj\Debug\Robot_GUI.Form1.resources
+C:\Users\snajberk.david21\source\repos\Robot_GUI\Robot_GUI\obj\Debug\Robot_GUI.Properties.Resources.resources
+C:\Users\snajberk.david21\source\repos\Robot_GUI\Robot_GUI\obj\Debug\Robot_GUI.csproj.GenerateResource.cache
+C:\Users\snajberk.david21\source\repos\Robot_GUI\Robot_GUI\obj\Debug\Robot_GUI.csproj.CoreCompileInputs.cache
+C:\Users\snajberk.david21\source\repos\Robot_GUI\Robot_GUI\obj\Debug\Robot_GUI.csproj.CopyComplete
+C:\Users\snajberk.david21\source\repos\Robot_GUI\Robot_GUI\obj\Debug\Robot_GUI.exe
+C:\Users\snajberk.david21\source\repos\Robot_GUI\Robot_GUI\obj\Debug\Robot_GUI.pdb
+C:\Users\snajberk.david21\OneDrive - Střední průmyslová škola a Vyšší odborná škola, Chomutov, Školní 50, příspěvková organizace\Robot_GUI\Robot_GUI\bin\Debug\Robot_GUI.exe.config
+C:\Users\snajberk.david21\OneDrive - Střední průmyslová škola a Vyšší odborná škola, Chomutov, Školní 50, příspěvková organizace\Robot_GUI\Robot_GUI\bin\Debug\Robot_GUI.exe
+C:\Users\snajberk.david21\OneDrive - Střední průmyslová škola a Vyšší odborná škola, Chomutov, Školní 50, příspěvková organizace\Robot_GUI\Robot_GUI\bin\Debug\Robot_GUI.pdb
+C:\Users\snajberk.david21\OneDrive - Střední průmyslová škola a Vyšší odborná škola, Chomutov, Školní 50, příspěvková organizace\Robot_GUI\Robot_GUI\bin\Debug\Automation.BDaq4.dll
+C:\Users\snajberk.david21\OneDrive - Střední průmyslová škola a Vyšší odborná škola, Chomutov, Školní 50, příspěvková organizace\Robot_GUI\Robot_GUI\bin\Debug\HidLibrary.dll
+C:\Users\snajberk.david21\OneDrive - Střední průmyslová škola a Vyšší odborná škola, Chomutov, Školní 50, příspěvková organizace\Robot_GUI\Robot_GUI\bin\Debug\HidLibrary.pdb
+C:\Users\snajberk.david21\OneDrive - Střední průmyslová škola a Vyšší odborná škola, Chomutov, Školní 50, příspěvková organizace\Robot_GUI\Robot_GUI\obj\Debug\Robot_GUI.csproj.AssemblyReference.cache
+C:\Users\snajberk.david21\OneDrive - Střední průmyslová škola a Vyšší odborná škola, Chomutov, Školní 50, příspěvková organizace\Robot_GUI\Robot_GUI\obj\Debug\Robot_GUI.csproj.SuggestedBindingRedirects.cache
+C:\Users\snajberk.david21\OneDrive - Střední průmyslová škola a Vyšší odborná škola, Chomutov, Školní 50, příspěvková organizace\Robot_GUI\Robot_GUI\obj\Debug\Robot_GUI.Form1.resources
+C:\Users\snajberk.david21\OneDrive - Střední průmyslová škola a Vyšší odborná škola, Chomutov, Školní 50, příspěvková organizace\Robot_GUI\Robot_GUI\obj\Debug\Robot_GUI.Properties.Resources.resources
+C:\Users\snajberk.david21\OneDrive - Střední průmyslová škola a Vyšší odborná škola, Chomutov, Školní 50, příspěvková organizace\Robot_GUI\Robot_GUI\obj\Debug\Robot_GUI.csproj.GenerateResource.cache
+C:\Users\snajberk.david21\OneDrive - Střední průmyslová škola a Vyšší odborná škola, Chomutov, Školní 50, příspěvková organizace\Robot_GUI\Robot_GUI\obj\Debug\Robot_GUI.csproj.CoreCompileInputs.cache
+C:\Users\snajberk.david21\OneDrive - Střední průmyslová škola a Vyšší odborná škola, Chomutov, Školní 50, příspěvková organizace\Robot_GUI\Robot_GUI\obj\Debug\Robot_GUI.csproj.CopyComplete
+C:\Users\snajberk.david21\OneDrive - Střední průmyslová škola a Vyšší odborná škola, Chomutov, Školní 50, příspěvková organizace\Robot_GUI\Robot_GUI\obj\Debug\Robot_GUI.exe
+C:\Users\snajberk.david21\OneDrive - Střední průmyslová škola a Vyšší odborná škola, Chomutov, Školní 50, příspěvková organizace\Robot_GUI\Robot_GUI\obj\Debug\Robot_GUI.pdb
+C:\Users\pc\OneDrive - Střední průmyslová škola a Vyšší odborná škola, Chomutov, Školní 50, příspěvková organizace\Robot_GUI\Robot_GUI\bin\Debug\Robot_GUI.exe.config
+C:\Users\pc\OneDrive - Střední průmyslová škola a Vyšší odborná škola, Chomutov, Školní 50, příspěvková organizace\Robot_GUI\Robot_GUI\bin\Debug\Robot_GUI.exe
+C:\Users\pc\OneDrive - Střední průmyslová škola a Vyšší odborná škola, Chomutov, Školní 50, příspěvková organizace\Robot_GUI\Robot_GUI\bin\Debug\Robot_GUI.pdb
+C:\Users\pc\OneDrive - Střední průmyslová škola a Vyšší odborná škola, Chomutov, Školní 50, příspěvková organizace\Robot_GUI\Robot_GUI\bin\Debug\Automation.BDaq4.dll
+C:\Users\pc\OneDrive - Střední průmyslová škola a Vyšší odborná škola, Chomutov, Školní 50, příspěvková organizace\Robot_GUI\Robot_GUI\bin\Debug\HidLibrary.dll
+C:\Users\pc\OneDrive - Střední průmyslová škola a Vyšší odborná škola, Chomutov, Školní 50, příspěvková organizace\Robot_GUI\Robot_GUI\bin\Debug\HidLibrary.pdb
+C:\Users\pc\OneDrive - Střední průmyslová škola a Vyšší odborná škola, Chomutov, Školní 50, příspěvková organizace\Robot_GUI\Robot_GUI\obj\Debug\Robot_GUI.csproj.AssemblyReference.cache
+C:\Users\pc\OneDrive - Střední průmyslová škola a Vyšší odborná škola, Chomutov, Školní 50, příspěvková organizace\Robot_GUI\Robot_GUI\obj\Debug\Robot_GUI.Form1.resources
+C:\Users\pc\OneDrive - Střední průmyslová škola a Vyšší odborná škola, Chomutov, Školní 50, příspěvková organizace\Robot_GUI\Robot_GUI\obj\Debug\Robot_GUI.Properties.Resources.resources
+C:\Users\pc\OneDrive - Střední průmyslová škola a Vyšší odborná škola, Chomutov, Školní 50, příspěvková organizace\Robot_GUI\Robot_GUI\obj\Debug\Robot_GUI.csproj.GenerateResource.cache
+C:\Users\pc\OneDrive - Střední průmyslová škola a Vyšší odborná škola, Chomutov, Školní 50, příspěvková organizace\Robot_GUI\Robot_GUI\obj\Debug\Robot_GUI.csproj.CoreCompileInputs.cache
+C:\Users\pc\OneDrive - Střední průmyslová škola a Vyšší odborná škola, Chomutov, Školní 50, příspěvková organizace\Robot_GUI\Robot_GUI\obj\Debug\Robot_GUI.csproj.Up2Date
+C:\Users\pc\OneDrive - Střední průmyslová škola a Vyšší odborná škola, Chomutov, Školní 50, příspěvková organizace\Robot_GUI\Robot_GUI\obj\Debug\Robot_GUI.exe
+C:\Users\pc\OneDrive - Střední průmyslová škola a Vyšší odborná škola, Chomutov, Školní 50, příspěvková organizace\Robot_GUI\Robot_GUI\obj\Debug\Robot_GUI.pdb
