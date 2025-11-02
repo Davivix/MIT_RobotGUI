@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Linq;
 using System.Timers;
 using HidLibrary;
-using System.Linq.Expressions;
 
 namespace Robot_GUI
 {
@@ -15,18 +9,14 @@ namespace Robot_GUI
         //private const int Gamepad_VendorID = 0x2563; // gembird gamepad
         private const int Gamepad_VendorID = 0x054C; // ps dualshock gamepad
         private HidDevice controller;
-        public System.Timers.Timer Reconnect_Timer;
+        private Timer Reconnect_Timer;
 
-        private TextBox debugger_window;
+        private bool[] LeftCross = new bool[4];
+        private bool[] RightButtons  = new bool[4];
 
-        public bool[] LeftCross { get; private set; } = new bool[4];
-        public bool[] RightButtons { get; private set; } = new bool[4];
-
-        public Controller(ref TextBox debugger_window)
+        public Controller()
         {
-            this.debugger_window = debugger_window;
-
-            Reconnect_Timer = new System.Timers.Timer();
+            Reconnect_Timer = new Timer();
             Reconnect_Timer.Elapsed += Try_Connect_Controller;
             Reconnect_Timer.Interval = 500;
             Reconnect_Timer.Start();
@@ -79,13 +69,6 @@ namespace Robot_GUI
             //report.Data[10] == 0xff,
             //report.Data[8] == 0xff
             //};
-            //byte[] d = report.Data;
-
-            //debugger_window.Invoke((MethodInvoker)delegate
-            //{
-            //    Debugger_Robot.OverWrite($"Report length: {d.Length}  First 16 bytes: {BitConverter.ToString(d.Take(Math.Min(16, d.Length)).ToArray())}", ref debugger_window);
-            //});
-
 
             byte b = report.Data[4]; // You confirmed all buttons live here
 

@@ -1,61 +1,38 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Robot_GUI
 {
     public partial class Form1 : Form
     {
+
         private Robot robot;
         private Controller controller;
         private Clock clock;
-
-        public CheckBox[] Manual_Inputs;
-        public bool Turning_dir, Turn_base, Engine_main_arm, Grabber, Arm_grabber;
-
-        CancellationTokenSource Robot_cts;
-
+        private CancellationTokenSource Robot_cts;
         private string File_Path;
 
         public Form1()
         {
             InitializeComponent();
 
-            robot = new Robot("PCIE-1730,BID#0", "PCIE-1730_profile.xml", ref Debugger_window);
-            controller = new Controller(ref Debugger_window);
+            robot = new Robot("PCIE-1730,BID#0", "PCIE-1730_profile.xml");
+            controller = new Controller();
             clock = new Clock(Update_Robot_Inputs);
 
-            Manual_Inputs = new CheckBox[] { Turning_dir_check, Turn_base_check, Engine_main_arm_check, Grabber_check, Arm_grabber_check };
 
-            Load += Form_Load;
             FormClosing += Form1_FormClosing;
         }
-
-        private void Form_Load(object sender, EventArgs e)
-        {
-            output.Text = $"Aktuální hodnota na vstupu robota: {0}\r\nInterval: {clock.Interval_ms * 2}ms\r\nFrekvence: {clock.Frequency}Hz";
-        }
-
-
 
         private void Update_Robot_Inputs()
         {
             // získání stavu vstupů uživatele
             bool[] user_inputs = new bool[5];
-            if (Controller_Mode.Checked)
-            {
-                user_inputs = controller.Return_Button_Data();
-            }
-            else
-                user_inputs = Manual_Inputs.Select(c => c.Checked).ToArray();
-
+            user_inputs = controller.Return_Button_Data();
 
             // výpočet hodnoty k zápisu pomocí stavu vstupů uživatele
             byte next_input_value = Robot.Get_Next_Input_Value(user_inputs, clock.ClockSignal);
@@ -65,8 +42,8 @@ namespace Robot_GUI
                 Handle_Movement_Recording_Logic(next_input_value);
 
             // zápis na výstup IO karty
-            //robot.Write_Input(next_input_value);
-            //byte output_value = robot.Read_Output();
+            robot.Write_Input(next_input_value);
+            byte output_value = robot.Read_Output();
 
             // Update UI
             output.Invoke((MethodInvoker)delegate
@@ -83,10 +60,6 @@ namespace Robot_GUI
             {
                 if (active_motors)
                 {
-                    Debugger_window.Invoke((MethodInvoker)delegate
-                    {
-                        Debugger_Robot.Log($"Stav: {next_input_value | (1 << (int)Robot.Input_BitPos.Clock)}", ref Debugger_window);
-                    });
                     FileManager.AppendLine(File_Path, $"{next_input_value | (1 << (int)Robot.Input_BitPos.Clock)}");
 
                     robot.Record_Initial_Position = false;
@@ -113,24 +86,15 @@ namespace Robot_GUI
 
             if ((motor_state_changed || turning_direction_changed) && active_motors)
             {
-                Debugger_window.Invoke((MethodInvoker)delegate
-                {
-                    Debugger_Robot.Log($"Kroky: {robot.Step_Count}", ref Debugger_window);
-                });
                 FileManager.AppendLine(File_Path, $"{robot.Step_Count}");
-
-                Debugger_window.Invoke((MethodInvoker)delegate
-                {
-                    Debugger_Robot.Log($"Stav: {next_input_value | (1 << (int)Robot.Input_BitPos.Clock)}", ref Debugger_window);
-                });
                 FileManager.AppendLine(File_Path, $"{next_input_value | (1 << (int)Robot.Input_BitPos.Clock)}");
-                robot.Step_Count = 0;
 
+                robot.Step_Count = 0;
                 robot.Previous_Input_Value = next_input_value;
             }
         }
 
-        private void Change_Frequency(object sender, EventArgs e)
+        private void Change_Frequency_Click(object sender, EventArgs e)
         {
             if (!double.TryParse(frequency_textbox.Text, out double Hz))
             {
@@ -140,7 +104,7 @@ namespace Robot_GUI
 
             clock.SetFrequency(Hz);
 
-            Debugger_Robot.Log($"Changed frequency to {clock.Frequency}Hz, interval: {clock.Interval_ms * 2}ms", ref Debugger_window);
+            Debugger_Robot.Log($"Frekvence byla změněna na {clock.Frequency}Hz, interval jednoho kroku: {clock.Interval_ms * 2}ms", ref Debugger_window, Color.White);
         }
 
         private void Clock_Enable_Changed(object sender, EventArgs e)
@@ -148,12 +112,12 @@ namespace Robot_GUI
             if (Clock_Enable.Checked)
             {
                 clock.Start();
-                Debugger_Robot.Log("Clock started", ref Debugger_window);
+                Debugger_Robot.Log("Clock started", ref Debugger_window, Color.White);
             }
             else
             {
                 clock.Stop();
-                Debugger_Robot.Log("Clock stopped", ref Debugger_window);
+                Debugger_Robot.Log("Clock stopped", ref Debugger_window, Color.White);
             }
         }
 
@@ -161,32 +125,38 @@ namespace Robot_GUI
         {
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
+                (byte[] input_states, int[] step_counts) file_data = (null, null);
                 try
                 {
-                    (byte[] input_states, int[] step_counts) file_data = FileManager.ReadFile(openFileDialog1.FileName);
-
-                    try
-                    {
-                        Robot_cts = new CancellationTokenSource();
-
-                        await robot.Execute_Learned_Movement(file_data.input_states, file_data.step_counts, clock.Interval_ms, Robot_cts.Token);
-                    }
-                    catch (OperationCanceledException)
-                    {
-                        Debugger_Robot.Log("Stopping operation.", ref Debugger_window);
-                    }
-                    finally
-                    {
-                        Robot_cts.Dispose();
-                        Robot_cts = null;
-                    }
+                    file_data = FileManager.ReadFile(openFileDialog1.FileName);
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show("Data jsou v neplatném formátu\n" + ex.Message, "Chyba", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                try
+                {
+                    Robot_cts = new CancellationTokenSource();
+                    Debugger_Robot.Log("Data úspěšně načtena, provádím načtený pohyb", ref Debugger_window, Color.Lime);
+
+                    await robot.Execute_Learned_Movement(file_data.input_states, file_data.step_counts, clock.Interval_ms, Robot_cts.Token);
+                    Debugger_Robot.Log("Načtený pohyb úspěšně proveden", ref Debugger_window, Color.Lime);
+                }
+                catch (OperationCanceledException)
+                {
+                    Debugger_Robot.Log("Opakování načteného pohybu zrušeno", ref Debugger_window, Color.Red);
+                }
+                finally
+                {
+                    Robot_cts.Dispose();
+                    Robot_cts = null;
                 }
             }
+
         }
+
 
         private void Record_Movement_Click(object sender, EventArgs e)
         {
@@ -202,7 +172,7 @@ namespace Robot_GUI
                     Movement_Record_btn.Text = "Ukončit nahrávání pohybu";
                     File_Path = saveFileDialog1.FileName;
                     FileManager.SaveFile(File_Path, "");
-                    Debugger_Robot.Log("Recording started", ref Debugger_window);
+                    Debugger_Robot.Log("Nahrávání pohybu spuštěno", ref Debugger_window, Color.Lime);
                 }
             }
             else
@@ -215,33 +185,33 @@ namespace Robot_GUI
 
                 robot.Step_Count = 0;
 
-                Debugger_Robot.Log("Recording stopped", ref Debugger_window);
+                Debugger_Robot.Log("Nahrávání pohybu ukončeno", ref Debugger_window, Color.Red);
             }
         }
 
-        private void Show_Manual(object sender, EventArgs e)
+        private void Show_Manual_Click(object sender, EventArgs e)
         {
-            var imgForm = new Form
+            Form manual_window = new Form
             {
-                Text = "Controller Layout",
+                Text = "Ovládání robota",
                 FormBorderStyle = FormBorderStyle.FixedDialog,
                 StartPosition = FormStartPosition.CenterParent,
                 Size = new Size(800, 450),
                 TopMost = true
             };
 
-            var picture = new PictureBox
+            PictureBox manual_picture = new PictureBox
             {
                 Dock = DockStyle.Fill,
                 Image = Image.FromFile("Resources/gembird_robot_manual.jpg"),
                 SizeMode = PictureBoxSizeMode.Zoom
             };
 
-            imgForm.Controls.Add(picture);
-            imgForm.Show();
+            manual_window.Controls.Add(manual_picture);
+            manual_window.Show();
         }
 
-        private async void Robot_Reset_Position_btn(object sender, EventArgs e)
+        private async void Robot_Reset_Position_Click(object sender, EventArgs e)
         {
             if (robot.Resetting_Position)
             {
@@ -261,12 +231,13 @@ namespace Robot_GUI
 
             try
             {
+                Debugger_Robot.Log("Robot se nastavuje do původní polohy", ref Debugger_window, Color.Lime);
                 await robot.Reset_Default_Position(clock.Interval_ms, Robot_cts.Token);
-                Debugger_Robot.Log("Robot position reset completed successfully", ref Debugger_window);
+                Debugger_Robot.Log("Robot byl úspěšně nastaven do původní polohy", ref Debugger_window, Color.Lime);
             }
             catch (OperationCanceledException)
             {
-                Debugger_Robot.Log("Stopping operation.", ref Debugger_window);
+                Debugger_Robot.Log("Nastavování robota do původní polohy zrušeno", ref Debugger_window, Color.Red);
             }
             finally
             {
@@ -291,12 +262,12 @@ namespace Robot_GUI
 
         private void On_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Escape)
             {
                 if (Robot_cts != null && !Robot_cts.IsCancellationRequested)
                 {
                     Robot_cts.Cancel();
-                    Debugger_Robot.Log("Interrupt key pressed.", ref Debugger_window);
+                    Debugger_Robot.Log("Interrupt key pressed.", ref Debugger_window, Color.Red);
                 }
             }
         }
@@ -307,17 +278,29 @@ namespace Robot_GUI
             controller.Dispose();
         }
 
+        private void Stop_Click(object sender, EventArgs e)
+        {
+            if (Robot_cts != null && !Robot_cts.IsCancellationRequested)
+            {
+                Robot_cts.Cancel();
+                Debugger_Robot.Log("Interrupt key pressed.", ref Debugger_window, Color.Red);
+            }
+
+            clock.Stop();
+        }
     }
 
     public static class Debugger_Robot
     {
-        public static void Log(string message, ref TextBox debugger_window)
+        public static void Log(string message, ref RichTextBox debugger_window, Color text_color)
         {
+            debugger_window.SelectionColor = text_color;
             debugger_window.AppendText($">{message}\r\n");
         }
 
-        public static void OverWrite(string message, ref TextBox debugger_window)
+        public static void OverWrite(string message, ref RichTextBox debugger_window, Color text_color)
         {
+            debugger_window.SelectionColor = text_color;
             debugger_window.Text = ($">{message}\r\n");
         }
     }

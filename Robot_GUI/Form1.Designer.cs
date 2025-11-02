@@ -28,166 +28,81 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.Debugger_window = new System.Windows.Forms.TextBox();
-            this.Turning_dir_check = new System.Windows.Forms.CheckBox();
-            this.Turn_base_check = new System.Windows.Forms.CheckBox();
-            this.Engine_main_arm_check = new System.Windows.Forms.CheckBox();
-            this.Arm_grabber_check = new System.Windows.Forms.CheckBox();
-            this.Grabber_check = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.frequency_textbox = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.Clock_Enable = new System.Windows.Forms.CheckBox();
-            this.Controller_Mode = new System.Windows.Forms.CheckBox();
-            this.label2 = new System.Windows.Forms.Label();
             this.output = new System.Windows.Forms.Label();
             this.Reset_btn = new System.Windows.Forms.Button();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.Movement_Record_btn = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.souborToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.načístZeSouboruToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.button2 = new System.Windows.Forms.Button();
-            this.menuStrip1.SuspendLayout();
+            this.button3 = new System.Windows.Forms.Button();
+            this.Debugger_window = new System.Windows.Forms.RichTextBox();
+            this.button4 = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
-            // Debugger_window
-            // 
-            this.Debugger_window.BackColor = System.Drawing.SystemColors.MenuText;
-            this.Debugger_window.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.Debugger_window.ForeColor = System.Drawing.Color.Lime;
-            this.Debugger_window.Location = new System.Drawing.Point(12, 207);
-            this.Debugger_window.Multiline = true;
-            this.Debugger_window.Name = "Debugger_window";
-            this.Debugger_window.ReadOnly = true;
-            this.Debugger_window.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.Debugger_window.Size = new System.Drawing.Size(354, 231);
-            this.Debugger_window.TabIndex = 0;
-            // 
-            // Turning_dir_check
-            // 
-            this.Turning_dir_check.AutoSize = true;
-            this.Turning_dir_check.Location = new System.Drawing.Point(21, 34);
-            this.Turning_dir_check.Name = "Turning_dir_check";
-            this.Turning_dir_check.Size = new System.Drawing.Size(90, 17);
-            this.Turning_dir_check.TabIndex = 1;
-            this.Turning_dir_check.Text = "Směr otáčení";
-            this.Turning_dir_check.UseVisualStyleBackColor = true;
-            // 
-            // Turn_base_check
-            // 
-            this.Turn_base_check.AutoSize = true;
-            this.Turn_base_check.Location = new System.Drawing.Point(21, 87);
-            this.Turn_base_check.Name = "Turn_base_check";
-            this.Turn_base_check.Size = new System.Drawing.Size(110, 17);
-            this.Turn_base_check.TabIndex = 2;
-            this.Turn_base_check.Text = "Otáčení základny";
-            this.Turn_base_check.UseVisualStyleBackColor = true;
-            // 
-            // Engine_main_arm_check
-            // 
-            this.Engine_main_arm_check.AutoSize = true;
-            this.Engine_main_arm_check.Location = new System.Drawing.Point(21, 134);
-            this.Engine_main_arm_check.Name = "Engine_main_arm_check";
-            this.Engine_main_arm_check.Size = new System.Drawing.Size(127, 17);
-            this.Engine_main_arm_check.TabIndex = 3;
-            this.Engine_main_arm_check.Text = "Motor: hlávní rameno";
-            this.Engine_main_arm_check.UseVisualStyleBackColor = true;
-            // 
-            // Arm_grabber_check
-            // 
-            this.Arm_grabber_check.AutoSize = true;
-            this.Arm_grabber_check.Location = new System.Drawing.Point(184, 87);
-            this.Arm_grabber_check.Name = "Arm_grabber_check";
-            this.Arm_grabber_check.Size = new System.Drawing.Size(141, 17);
-            this.Arm_grabber_check.TabIndex = 4;
-            this.Arm_grabber_check.Text = "Motor: rameno chapadlo";
-            this.Arm_grabber_check.UseVisualStyleBackColor = true;
-            // 
-            // Grabber_check
-            // 
-            this.Grabber_check.AutoSize = true;
-            this.Grabber_check.Location = new System.Drawing.Point(184, 134);
-            this.Grabber_check.Name = "Grabber_check";
-            this.Grabber_check.Size = new System.Drawing.Size(103, 17);
-            this.Grabber_check.TabIndex = 5;
-            this.Grabber_check.Text = "Motor: chapadlo";
-            this.Grabber_check.UseVisualStyleBackColor = true;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(593, 34);
+            this.label1.Location = new System.Drawing.Point(593, 36);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(86, 13);
+            this.label1.Size = new System.Drawing.Size(103, 13);
             this.label1.TabIndex = 6;
             this.label1.Text = "Změnit frekvenci";
             // 
             // frequency_textbox
             // 
-            this.frequency_textbox.Location = new System.Drawing.Point(596, 59);
+            this.frequency_textbox.Location = new System.Drawing.Point(595, 61);
+            this.frequency_textbox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.frequency_textbox.Name = "frequency_textbox";
             this.frequency_textbox.Size = new System.Drawing.Size(100, 20);
             this.frequency_textbox.TabIndex = 7;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(713, 56);
+            this.button1.Location = new System.Drawing.Point(713, 55);
+            this.button1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.Size = new System.Drawing.Size(76, 23);
             this.button1.TabIndex = 8;
             this.button1.Text = "Změnit";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.Change_Frequency);
+            this.button1.Click += new System.EventHandler(this.Change_Frequency_Click);
             // 
             // Clock_Enable
             // 
             this.Clock_Enable.AutoSize = true;
-            this.Clock_Enable.Location = new System.Drawing.Point(596, 118);
+            this.Clock_Enable.Location = new System.Drawing.Point(599, 101);
+            this.Clock_Enable.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Clock_Enable.Name = "Clock_Enable";
-            this.Clock_Enable.Size = new System.Drawing.Size(89, 17);
+            this.Clock_Enable.Size = new System.Drawing.Size(98, 17);
             this.Clock_Enable.TabIndex = 9;
             this.Clock_Enable.Text = "Clock Enable";
             this.Clock_Enable.UseVisualStyleBackColor = true;
             this.Clock_Enable.Click += new System.EventHandler(this.Clock_Enable_Changed);
             // 
-            // Controller_Mode
-            // 
-            this.Controller_Mode.AutoSize = true;
-            this.Controller_Mode.Location = new System.Drawing.Point(596, 217);
-            this.Controller_Mode.Name = "Controller_Mode";
-            this.Controller_Mode.Size = new System.Drawing.Size(55, 17);
-            this.Controller_Mode.TabIndex = 10;
-            this.Controller_Mode.Text = "Režim";
-            this.Controller_Mode.UseVisualStyleBackColor = true;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(593, 178);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(104, 26);
-            this.label2.TabIndex = 11;
-            this.label2.Text = "Unchecked: Manuál\r\nChecked: Ovladač\r\n";
-            // 
             // output
             // 
-            this.output.Location = new System.Drawing.Point(372, 356);
+            this.output.Location = new System.Drawing.Point(479, 263);
+            this.output.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.output.Name = "output";
-            this.output.Size = new System.Drawing.Size(416, 73);
+            this.output.Size = new System.Drawing.Size(308, 75);
             this.output.TabIndex = 12;
             // 
             // Reset_btn
             // 
-            this.Reset_btn.Location = new System.Drawing.Point(596, 265);
+            this.Reset_btn.Location = new System.Drawing.Point(581, 140);
+            this.Reset_btn.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Reset_btn.Name = "Reset_btn";
             this.Reset_btn.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.Reset_btn.Size = new System.Drawing.Size(155, 23);
+            this.Reset_btn.Size = new System.Drawing.Size(169, 23);
             this.Reset_btn.TabIndex = 13;
             this.Reset_btn.Text = "Reset do základní pozice";
             this.Reset_btn.UseVisualStyleBackColor = true;
-            this.Reset_btn.Click += new System.EventHandler(this.Robot_Reset_Position_btn);
+            this.Reset_btn.Click += new System.EventHandler(this.Robot_Reset_Position_Click);
             // 
             // saveFileDialog1
             // 
@@ -196,9 +111,10 @@
             // 
             // Movement_Record_btn
             // 
-            this.Movement_Record_btn.Location = new System.Drawing.Point(596, 330);
+            this.Movement_Record_btn.Location = new System.Drawing.Point(581, 185);
+            this.Movement_Record_btn.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Movement_Record_btn.Name = "Movement_Record_btn";
-            this.Movement_Record_btn.Size = new System.Drawing.Size(155, 23);
+            this.Movement_Record_btn.Size = new System.Drawing.Size(169, 23);
             this.Movement_Record_btn.TabIndex = 14;
             this.Movement_Record_btn.Text = "Začít nahrávat pohyb";
             this.Movement_Record_btn.UseVisualStyleBackColor = true;
@@ -210,99 +126,98 @@
             this.openFileDialog1.FileName = "openFileDialog1";
             this.openFileDialog1.Filter = "\"Text files (*.txt)|*.txt|All files (*.*)|*.*\"";
             // 
-            // menuStrip1
-            // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.souborToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(800, 24);
-            this.menuStrip1.TabIndex = 15;
-            this.menuStrip1.Text = "menuStrip1";
-            // 
-            // souborToolStripMenuItem
-            // 
-            this.souborToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.načístZeSouboruToolStripMenuItem});
-            this.souborToolStripMenuItem.Name = "souborToolStripMenuItem";
-            this.souborToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
-            this.souborToolStripMenuItem.Text = "Soubor";
-            // 
-            // načístZeSouboruToolStripMenuItem
-            // 
-            this.načístZeSouboruToolStripMenuItem.Name = "načístZeSouboruToolStripMenuItem";
-            this.načístZeSouboruToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
-            this.načístZeSouboruToolStripMenuItem.Text = "Načíst ze souboru";
-            this.načístZeSouboruToolStripMenuItem.Click += new System.EventHandler(this.Load_File_Click);
-            // 
             // button2
             // 
             this.button2.Location = new System.Drawing.Point(713, 406);
+            this.button2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.Size = new System.Drawing.Size(76, 23);
             this.button2.TabIndex = 16;
-            this.button2.Text = "Manual";
+            this.button2.Text = "Manuál";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.Show_Manual);
+            this.button2.Click += new System.EventHandler(this.Show_Manual_Click);
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(479, 40);
+            this.button3.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(92, 40);
+            this.button3.TabIndex = 17;
+            this.button3.Text = "STOP";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.Stop_Click);
+            // 
+            // Debugger_window
+            // 
+            this.Debugger_window.BackColor = System.Drawing.Color.Black;
+            this.Debugger_window.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.Debugger_window.ForeColor = System.Drawing.Color.White;
+            this.Debugger_window.Location = new System.Drawing.Point(12, 12);
+            this.Debugger_window.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.Debugger_window.Name = "Debugger_window";
+            this.Debugger_window.ReadOnly = true;
+            this.Debugger_window.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Horizontal;
+            this.Debugger_window.ShortcutsEnabled = false;
+            this.Debugger_window.Size = new System.Drawing.Size(444, 433);
+            this.Debugger_window.TabIndex = 18;
+            this.Debugger_window.TabStop = false;
+            this.Debugger_window.Text = "";
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(581, 227);
+            this.button4.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.button4.Name = "button4";
+            this.button4.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.button4.Size = new System.Drawing.Size(169, 23);
+            this.button4.TabIndex = 19;
+            this.button4.Text = "Načíst pohyb ze souboru";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.Load_File_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(799, 452);
+            this.Controls.Add(this.button4);
+            this.Controls.Add(this.Debugger_window);
+            this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.Movement_Record_btn);
             this.Controls.Add(this.Reset_btn);
             this.Controls.Add(this.output);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.Controller_Mode);
             this.Controls.Add(this.Clock_Enable);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.frequency_textbox);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.Grabber_check);
-            this.Controls.Add(this.Arm_grabber_check);
-            this.Controls.Add(this.Engine_main_arm_check);
-            this.Controls.Add(this.Turn_base_check);
-            this.Controls.Add(this.Turning_dir_check);
-            this.Controls.Add(this.Debugger_window);
-            this.Controls.Add(this.menuStrip1);
+            this.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.KeyPreview = true;
-            this.MainMenuStrip = this.menuStrip1;
+            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "Form1";
             this.Text = "RobotGUI";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.On_KeyDown);
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.TextBox Debugger_window;
-        private System.Windows.Forms.CheckBox Turning_dir_check;
-        private System.Windows.Forms.CheckBox Turn_base_check;
-        private System.Windows.Forms.CheckBox Engine_main_arm_check;
-        private System.Windows.Forms.CheckBox Arm_grabber_check;
-        private System.Windows.Forms.CheckBox Grabber_check;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox frequency_textbox;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.CheckBox Clock_Enable;
-        private System.Windows.Forms.CheckBox Controller_Mode;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label output;
         private System.Windows.Forms.Button Reset_btn;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.Button Movement_Record_btn;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
-        private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem souborToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem načístZeSouboruToolStripMenuItem;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.RichTextBox Debugger_window;
+        private System.Windows.Forms.Button button4;
     }
 }
 

@@ -1,24 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Threading;
 
 namespace Robot_GUI
 {
     internal class Clock
     {
+        // private
         private Timer Timer;
         private Action TickAction;
-
         private bool IsRunning;
 
+        // public
         public bool ClockSignal { get; private set; } = false;
-        public int Interval_ms { get; private set; } = 500; // doba půl periody, => 1Hz
-        public double Frequency = 1;
-
-      
+        public int Interval_ms { get; private set; } = 500;
+        public double Frequency { get; private set; } = 1;
 
         public Clock(Action ontick)
         {
@@ -64,6 +59,5 @@ namespace Robot_GUI
             Timer.Dispose();
             Timer = null;
         }
-
     }
 }
