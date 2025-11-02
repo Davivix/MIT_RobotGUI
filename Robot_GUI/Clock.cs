@@ -9,25 +9,27 @@ namespace Robot_GUI
 {
     internal class Clock
     {
-        private Timer timer;
-        private Action tickAction;
+        private Timer Timer;
+        private Action TickAction;
+
+        private bool IsRunning;
 
         public bool ClockSignal { get; private set; } = false;
         public int Interval_ms { get; private set; } = 500; // doba půl periody, => 1Hz
         public double Frequency = 1;
 
-        public bool IsRunning { get; private set; }
+      
 
         public Clock(Action ontick)
         {
-            tickAction = ontick;
-            timer = new Timer(Ontick, null, Timeout.Infinite, Timeout.Infinite);
+            TickAction = ontick;
+            Timer = new Timer(Ontick, null, Timeout.Infinite, Timeout.Infinite);
         }
 
         private void Ontick(object state)
         {
             ClockSignal = !ClockSignal;
-            tickAction.Invoke();
+            TickAction.Invoke();
         }
 
         public void SetFrequency(double hz)
@@ -42,25 +44,25 @@ namespace Robot_GUI
             Interval_ms = (int)(1000.0 / hz / 2);
 
             if (IsRunning)
-                timer.Change(0, Interval_ms);
+                Timer.Change(0, Interval_ms);
         }
 
         public void Start()
         {
             IsRunning = true;
-            timer.Change(0, Interval_ms);
+            Timer.Change(0, Interval_ms);
         }
 
         public void Stop()
         {
             IsRunning = false;
-            timer.Change(Timeout.Infinite, Timeout.Infinite);
+            Timer.Change(Timeout.Infinite, Timeout.Infinite);
         }
 
         public void Dispose()
         {
-            timer.Dispose();
-            timer = null;
+            Timer.Dispose();
+            Timer = null;
         }
 
     }

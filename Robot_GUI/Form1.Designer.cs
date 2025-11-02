@@ -41,7 +41,15 @@
             this.Controller_Mode = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.output = new System.Windows.Forms.Label();
+            this.Reset_btn = new System.Windows.Forms.Button();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.Movement_Record_btn = new System.Windows.Forms.Button();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.souborToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.načístZeSouboruToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.button2 = new System.Windows.Forms.Button();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // Debugger_window
@@ -170,15 +178,72 @@
             this.output.Size = new System.Drawing.Size(416, 73);
             this.output.TabIndex = 12;
             // 
+            // Reset_btn
+            // 
+            this.Reset_btn.Location = new System.Drawing.Point(596, 265);
+            this.Reset_btn.Name = "Reset_btn";
+            this.Reset_btn.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.Reset_btn.Size = new System.Drawing.Size(155, 23);
+            this.Reset_btn.TabIndex = 13;
+            this.Reset_btn.Text = "Reset do základní pozice";
+            this.Reset_btn.UseVisualStyleBackColor = true;
+            this.Reset_btn.Click += new System.EventHandler(this.Robot_Reset_Position_btn);
+            // 
+            // saveFileDialog1
+            // 
+            this.saveFileDialog1.DefaultExt = "txt";
+            this.saveFileDialog1.Filter = "\"Text files (*.txt)|*.txt|All files (*.*)|*.*\"";
+            // 
+            // Movement_Record_btn
+            // 
+            this.Movement_Record_btn.Location = new System.Drawing.Point(596, 330);
+            this.Movement_Record_btn.Name = "Movement_Record_btn";
+            this.Movement_Record_btn.Size = new System.Drawing.Size(155, 23);
+            this.Movement_Record_btn.TabIndex = 14;
+            this.Movement_Record_btn.Text = "Začít nahrávat pohyb";
+            this.Movement_Record_btn.UseVisualStyleBackColor = true;
+            this.Movement_Record_btn.Click += new System.EventHandler(this.Record_Movement_Click);
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.DefaultExt = "txt";
+            this.openFileDialog1.FileName = "openFileDialog1";
+            this.openFileDialog1.Filter = "\"Text files (*.txt)|*.txt|All files (*.*)|*.*\"";
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.souborToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(800, 24);
+            this.menuStrip1.TabIndex = 15;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // souborToolStripMenuItem
+            // 
+            this.souborToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.načístZeSouboruToolStripMenuItem});
+            this.souborToolStripMenuItem.Name = "souborToolStripMenuItem";
+            this.souborToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
+            this.souborToolStripMenuItem.Text = "Soubor";
+            // 
+            // načístZeSouboruToolStripMenuItem
+            // 
+            this.načístZeSouboruToolStripMenuItem.Name = "načístZeSouboruToolStripMenuItem";
+            this.načístZeSouboruToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.načístZeSouboruToolStripMenuItem.Text = "Načíst ze souboru";
+            this.načístZeSouboruToolStripMenuItem.Click += new System.EventHandler(this.Load_File_Click);
+            // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(633, 267);
+            this.button2.Location = new System.Drawing.Point(713, 406);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(155, 23);
-            this.button2.TabIndex = 13;
-            this.button2.Text = "Reset do základní pozice";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 16;
+            this.button2.Text = "Manual";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.Robot_Reset_Position);
+            this.button2.Click += new System.EventHandler(this.Show_Manual);
             // 
             // Form1
             // 
@@ -186,6 +251,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.button2);
+            this.Controls.Add(this.Movement_Record_btn);
+            this.Controls.Add(this.Reset_btn);
             this.Controls.Add(this.output);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.Controller_Mode);
@@ -199,9 +266,15 @@
             this.Controls.Add(this.Turn_base_check);
             this.Controls.Add(this.Turning_dir_check);
             this.Controls.Add(this.Debugger_window);
+            this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.KeyPreview = true;
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "RobotGUI";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.On_KeyDown);
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -222,6 +295,13 @@
         private System.Windows.Forms.CheckBox Controller_Mode;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label output;
+        private System.Windows.Forms.Button Reset_btn;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.Button Movement_Record_btn;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem souborToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem načístZeSouboruToolStripMenuItem;
         private System.Windows.Forms.Button button2;
     }
 }
