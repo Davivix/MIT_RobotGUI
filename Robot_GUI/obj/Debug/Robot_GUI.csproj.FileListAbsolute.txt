@@ -43,3 +43,4 @@ C:\Users\pc\OneDrive - Střední průmyslová škola a Vyšší odborná škola,
 C:\Users\pc\OneDrive - Střední průmyslová škola a Vyšší odborná škola, Chomutov, Školní 50, příspěvková organizace\Robot_GUI\Robot_GUI\obj\Debug\Robot_GUI.exe
 C:\Users\pc\OneDrive - Střední průmyslová škola a Vyšší odborná škola, Chomutov, Školní 50, příspěvková organizace\Robot_GUI\Robot_GUI\obj\Debug\Robot_GUI.pdb
 C:\Users\pc\OneDrive - Střední průmyslová škola a Vyšší odborná škola, Chomutov, Školní 50, příspěvková organizace\Robot_GUI\Robot_GUI\bin\Debug\Resources\gembird_robot_manual.jpg
+C:\Users\snajberk.david21\OneDrive - Střední průmyslová škola a Vyšší odborná škola, Chomutov, Školní 50, příspěvková organizace\Robot_GUI\Robot_GUI\bin\Debug\Resources\gembird_robot_manual.jpg

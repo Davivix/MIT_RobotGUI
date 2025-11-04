@@ -40,7 +40,7 @@
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.Debugger_window = new System.Windows.Forms.RichTextBox();
-            this.button4 = new System.Windows.Forms.Button();
+            this.LoadFile_btn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -139,7 +139,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(479, 40);
+            this.button3.Location = new System.Drawing.Point(482, 41);
             this.button3.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(92, 40);
@@ -157,31 +157,31 @@
             this.Debugger_window.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Debugger_window.Name = "Debugger_window";
             this.Debugger_window.ReadOnly = true;
-            this.Debugger_window.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Horizontal;
+            this.Debugger_window.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
             this.Debugger_window.ShortcutsEnabled = false;
-            this.Debugger_window.Size = new System.Drawing.Size(444, 433);
+            this.Debugger_window.Size = new System.Drawing.Size(459, 433);
             this.Debugger_window.TabIndex = 18;
             this.Debugger_window.TabStop = false;
             this.Debugger_window.Text = "";
             // 
-            // button4
+            // LoadFile_btn
             // 
-            this.button4.Location = new System.Drawing.Point(581, 227);
-            this.button4.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.button4.Name = "button4";
-            this.button4.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.button4.Size = new System.Drawing.Size(169, 23);
-            this.button4.TabIndex = 19;
-            this.button4.Text = "Načíst pohyb ze souboru";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.Load_File_Click);
+            this.LoadFile_btn.Location = new System.Drawing.Point(581, 227);
+            this.LoadFile_btn.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.LoadFile_btn.Name = "LoadFile_btn";
+            this.LoadFile_btn.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.LoadFile_btn.Size = new System.Drawing.Size(169, 23);
+            this.LoadFile_btn.TabIndex = 19;
+            this.LoadFile_btn.Text = "Načíst pohyb ze souboru";
+            this.LoadFile_btn.UseVisualStyleBackColor = true;
+            this.LoadFile_btn.Click += new System.EventHandler(this.Load_File_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(799, 452);
-            this.Controls.Add(this.button4);
+            this.Controls.Add(this.LoadFile_btn);
             this.Controls.Add(this.Debugger_window);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
@@ -217,7 +217,7 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.RichTextBox Debugger_window;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button LoadFile_btn;
     }
 }
 

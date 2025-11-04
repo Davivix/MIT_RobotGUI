@@ -20,7 +20,7 @@ namespace Robot_GUI
         {
             InitializeComponent();
 
-            robot = new Robot("PCIE-1730,BID#0", "PCIE-1730_profile.xml");
+            robot = new Robot("PCIE-1730,BID#0", "PCIE-1730_profile.xml",ref Debugger_window);
             controller = new Controller();
             clock = new Clock(Update_Robot_Inputs);
 
@@ -35,7 +35,7 @@ namespace Robot_GUI
             user_inputs = controller.Return_Button_Data();
 
             // výpočet hodnoty k zápisu pomocí stavu vstupů uživatele
-            byte next_input_value = Robot.Get_Next_Input_Value(user_inputs, clock.ClockSignal);
+            byte next_input_value = Robot.Get_Next_Input_Value(user_inputs, clock.ClockSignal, robot.Bits_Excluding_Clock);
             next_input_value = (byte)~next_input_value; // negativní logika
 
             if (robot.Recording_Movement)
@@ -54,7 +54,7 @@ namespace Robot_GUI
 
         private void Handle_Movement_Recording_Logic(byte next_input_value)
         {
-            bool active_motors = robot.Is_Any_Motor_Active(next_input_value, robot.Bits_Motors);
+            bool active_motors = Robot.Is_Any_Motor_Active(next_input_value, robot.Bits_Motors);
 
             if (robot.Record_Initial_Position)
             {
@@ -80,8 +80,8 @@ namespace Robot_GUI
                     robot.Step_Count++;
             }
 
-            bool motor_state_changed = robot.Input_State_Changed(next_input_value, robot.Previous_Input_Value, robot.Bits_Motors);
-            bool turning_direction_changed = robot.Input_State_Changed(next_input_value, robot.Previous_Input_Value, Robot.Input_BitPos.Turning_direction);
+            bool motor_state_changed = Robot.Input_State_Changed(next_input_value, robot.Previous_Input_Value, robot.Bits_Motors);
+            bool turning_direction_changed = Robot.Input_State_Changed(next_input_value, robot.Previous_Input_Value, Robot.Input_BitPos.Turning_direction);
 
 
             if ((motor_state_changed || turning_direction_changed) && active_motors)
@@ -136,11 +136,13 @@ namespace Robot_GUI
                     return;
                 }
 
+                Debugger_Robot.Log("Data úspěšně načtena, provádím načtený pohyb", ref Debugger_window, Color.Lime);
+                Robot_cts = new CancellationTokenSource();
+                clock.Stop();
+                Set_Controls(false, sender);
+
                 try
                 {
-                    Robot_cts = new CancellationTokenSource();
-                    Debugger_Robot.Log("Data úspěšně načtena, provádím načtený pohyb", ref Debugger_window, Color.Lime);
-
                     await robot.Execute_Learned_Movement(file_data.input_states, file_data.step_counts, clock.Interval_ms, Robot_cts.Token);
                     Debugger_Robot.Log("Načtený pohyb úspěšně proveden", ref Debugger_window, Color.Lime);
                 }
@@ -150,6 +152,7 @@ namespace Robot_GUI
                 }
                 finally
                 {
+                    Set_Controls(true, sender);
                     Robot_cts.Dispose();
                     Robot_cts = null;
                 }
@@ -166,7 +169,7 @@ namespace Robot_GUI
                 {
                     robot.Recording_Movement = true;
                     robot.Record_Initial_Position = true;
-                    Reset_btn.Enabled = false;
+                    Set_Controls(false, sender);
 
                     robot.Step_Count = 0;
                     Movement_Record_btn.Text = "Ukončit nahrávání pohybu";
@@ -179,7 +182,8 @@ namespace Robot_GUI
             {
                 robot.Recording_Movement = false;
                 Movement_Record_btn.Text = "Začít nahrávat pohyb";
-                Reset_btn.Enabled = true;
+                Set_Controls(true, sender);
+
 
                 FileManager.AppendLine(File_Path, $"{robot.Step_Count}");
 
@@ -225,7 +229,7 @@ namespace Robot_GUI
             Reset_btn.Text = "Zastavit operaci";
 
             clock.Stop();
-            Set_Controls(false);
+            Set_Controls(false, sender);
 
             Robot_cts = new CancellationTokenSource();
 
@@ -247,17 +251,27 @@ namespace Robot_GUI
                 robot.Resetting_Position = false;
                 Reset_btn.Text = "Reset do základní pozice";
 
-                Set_Controls(true);
+                Set_Controls(true, sender);
             }
         }
 
-        private void Set_Controls(bool state)
+        private void Set_Controls(bool state, object sender)
         {
-            Clock_Enable.Enabled = state;
-            Movement_Record_btn.Enabled = state;
+            Button btn = (Button)sender;
 
-            if (!state)
-                Clock_Enable.Checked = state;
+            if (btn.Name != "Reset_btn")
+            {
+                Reset_btn.Enabled = state;
+            }
+            if (btn.Name != "Movement_Record_btn")
+            {
+                Movement_Record_btn.Enabled = state;
+                Clock_Enable.Enabled = state;
+                if (!state)
+                    Clock_Enable.Checked = state;
+            }
+
+            LoadFile_btn.Enabled = state;
         }
 
         private void On_KeyDown(object sender, KeyEventArgs e)
@@ -296,12 +310,7 @@ namespace Robot_GUI
         {
             debugger_window.SelectionColor = text_color;
             debugger_window.AppendText($">{message}\r\n");
-        }
-
-        public static void OverWrite(string message, ref RichTextBox debugger_window, Color text_color)
-        {
-            debugger_window.SelectionColor = text_color;
-            debugger_window.Text = ($">{message}\r\n");
+            debugger_window.ScrollToCaret();
         }
     }
 

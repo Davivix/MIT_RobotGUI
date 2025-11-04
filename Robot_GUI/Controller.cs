@@ -70,7 +70,7 @@ namespace Robot_GUI
             //report.Data[8] == 0xff
             //};
 
-            byte b = report.Data[4]; // You confirmed all buttons live here
+            byte b = report.Data[4];
 
             // --- Right buttons (face) ---
             // bits 7-4 = Triangle, Circle, Cross, Square
