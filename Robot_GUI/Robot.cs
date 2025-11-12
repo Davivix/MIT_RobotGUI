@@ -15,12 +15,16 @@ namespace Robot_GUI
         private InstantDiCtrl IO_Input;
 
         // public
-        public const int MaxFrequency = 126;
-        public int Step_Count = 0;
+        public const int MaxFrequency = 450;
 
-        // flagy
+        // flagy:
+        // pokud robot právě nahrává pohyb
         public bool Recording_Movement = false;
+
+        // pokud byla první pozice při nahrávání pohybu zaznamenána
         public bool Record_Initial_Position = false;
+
+        // pokud se právě robot resetuje do základní pozice
         public bool Resetting_Position = false;
 
         // Definuje fyzické propojení výstupu IO-karty ke vstupu robota, bitové pořadí jednotlivých signálů.
@@ -60,12 +64,13 @@ namespace Robot_GUI
             Input_BitPos.Engine_grab_arm
         };
 
-        private RichTextBox Debugger_Window;
+        // předchozí hodnota na vstupu robota, slouží při učení pohybu, jestli se předchozí a příští stav změnil
         public byte Previous_Input_Value = 0xFF;
+        // počítá kroky při učení pohybu
+        public int Step_Count = 0;
 
-        public Robot(string device_description, string profile, ref RichTextBox debugger_window)
+        public Robot(string device_description, string profile)
         {
-            Debugger_Window = debugger_window;
             DeviceInformation ioDevice = new DeviceInformation();
             ioDevice.Description = device_description;
             ioDevice.DeviceMode = AccessMode.ModeWrite;
@@ -80,11 +85,11 @@ namespace Robot_GUI
             IO_Input.LoadProfile(profile);
         }
 
-        public static byte Get_Next_Input_Value(bool[] inputs, bool clock_signal, Input_BitPos[] bits_to_mask)
+        public static byte Get_Next_Input_Value(bool[] user_inputs, bool clock_signal, Input_BitPos[] bits_to_mask)
         {
             byte value = 0;
-            for (int i = 0; i < inputs.Length; i++)
-                value |= (byte)(Convert.ToByte(inputs[i]) << (byte)bits_to_mask[i]);
+            for (int i = 0; i < user_inputs.Length; i++)
+                value |= (byte)(Convert.ToByte(user_inputs[i]) << (byte)bits_to_mask[i]);
 
             if (clock_signal)
                 value ^= 1 << (byte)Input_BitPos.Clock;
@@ -105,35 +110,39 @@ namespace Robot_GUI
 
         // Vratí robota do původní pozice
         // Motor je v původní pozici, jestli se na vstupu IOkarty nachází log. 0
-        // Postupně pro každý motor provede 500 kroků do jednoho směru, pokud se nedostane do původní pozice, provede 1000 kroků v opačném směru
+        // Postupně pro každý motor:
+        //      Základna: provede 1500 kroků do jednoho směru, pokud se nedostane do původní pozice, provede 3000 kroků v opačném směru
+        //      Hlavní rameno: otáčí se směrem nahoru
+        //      Rameno s chapadlem: otáčí se směrem nahoru
+        //      Chapadlo: otevírá se
         public async Task Reset_Default_Position(int clock_interval, CancellationToken token)
         {
             foreach (Output_BitPost bitpos in Enum.GetValues(typeof(Output_BitPost)))
             {
-                int max_steps = 20;
+                int max_steps = 1500;
                 int steps = 0;
 
                 string name = Enum.GetName(typeof(Output_BitPost), bitpos);
                 int input_value = (int)Enum.Parse(typeof(Input_BitPos), name);
 
+                // jestli daný motor je základna
                 bool turning_base = false;
                 if (name == "Engine_turn_base")
                     turning_base = true;
 
                 byte motor_bit = Get_Reset_Write_Value(name, input_value);
-                Debugger_Robot.Log($"Resetting: {name}", ref Debugger_Window, Color.Green);
 
                 while ((Read_Output() & (1 << (int)bitpos)) != 0)
                 {
                     token.ThrowIfCancellationRequested();
 
-                    await Step(clock_interval, motor_bit, token);
+                    await Step(clock_interval, motor_bit);
 
                     steps++;
 
                     if (steps > max_steps)
                     {
-                        if (turning_base)
+                        if (turning_base) // pokud se jedná o základnu
                         {
                             // Změna směru
                             motor_bit ^= (1 << (int)Input_BitPos.Turning_direction);
@@ -141,7 +150,7 @@ namespace Robot_GUI
                             steps = 0;
                             max_steps *= 2;
 
-                            if (max_steps > 40)
+                            if (max_steps > 3000)
                                 break;
                         }
                         else
@@ -154,20 +163,20 @@ namespace Robot_GUI
 
         private byte Get_Reset_Write_Value(string name, int input_value)
         {
-            byte motor_bit = (byte)~(1 << input_value);
+            byte write_value = (byte)~(1 << input_value);
 
             switch (name)
             {
                 case "Engine_main_arm":
-                    motor_bit ^= 1 << (int)Input_BitPos.Turning_direction; // nastavíme do nuly, směr nahoru
+                    write_value ^= 1 << (int)Input_BitPos.Turning_direction; // nastavíme do nuly, směr nahoru
                     break;
                 case "Engine_grabber":
-                    motor_bit ^= 1 << (int)Input_BitPos.Turning_direction; // nastavíme do nuly, otevřít chapadlo
+                    write_value ^= 1 << (int)Input_BitPos.Turning_direction; // nastavíme do nuly, otevřít chapadlo
                     break;
             }
             // Pro rameno s chapadlem je potřebná hodnota směru otáčení log. 1, tedy směr nahoru, jelikož je log. 1 nastavená defaultně, nepotřebujeme podmínku
 
-            return motor_bit;
+            return write_value;
         }
 
         // Provede načtený pohyb ze souboru, kde pro každý stav 'input_states[n]' vykoná 'step_counts[n]' kroků
@@ -182,20 +191,20 @@ namespace Robot_GUI
                 {
                     token.ThrowIfCancellationRequested();
 
-                    await Step(step_interval, state,token);
+                    await Step(step_interval, state);
                 }
             }
         }
 
         // Provede jeden krok robota
-        private async Task Step(int interval, byte write_value, CancellationToken token)
+        private async Task Step(int interval, byte write_value)
         {
             Write_Input(write_value);
-            await Precision.DelayAsync(interval, token);
+            await Task.Delay(interval);
 
             write_value ^= 1 << (byte)Input_BitPos.Clock;
             Write_Input(write_value);
-            await Precision.DelayAsync(interval, token);
+            await Task.Delay(interval);
         }
 
         // Kontroluje, jestli je alespoň jeden motor aktivní. Pokud ano, vrací 'true'

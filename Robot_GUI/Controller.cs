@@ -54,6 +54,7 @@ namespace Robot_GUI
         {
             // in order - TOP - RIGHT - BOTTOM - LEFT
 
+            // ---- GEMBIRD CONTROLLER ----
             //RightButtons = new[]
             //{
             //report.Data[11] == 0xff,
@@ -69,7 +70,10 @@ namespace Robot_GUI
             //report.Data[10] == 0xff,
             //report.Data[8] == 0xff
             //};
+            
 
+            // ---- DUALSHOCK CONTROLLER ----
+            
             byte b = report.Data[4];
 
             // --- Right buttons (face) ---
@@ -100,14 +104,14 @@ namespace Robot_GUI
             bool counter_clockwise = true;
 
             // button mapping
-            if (!(LeftCross[3] && LeftCross[1])) // skip if both left and right buttons are pressed
+            if (!(LeftCross[3] && LeftCross[1])) // pokud není levé a pravé tlačítko zmáčknuté zároveň, otáčet se do obou směrů zároveń nejde
             {
-                if (LeftCross[3]) // if left button is pressed
+                if (LeftCross[3]) // levé tlačítko, otáčení základny po směru hod. ruč.
                 {
                     inputs[1] = LeftCross[3];
                     inputs[0] = clockwise;
                 }
-                else if (LeftCross[1]) // if right button is pressed
+                else if (LeftCross[1]) // pravé tlačítko, otáčení základny proti směru hod. ruč.
                 {
                     inputs[1] = LeftCross[1];
                     inputs[0] = counter_clockwise;
@@ -116,12 +120,12 @@ namespace Robot_GUI
 
             if (!(LeftCross[2] && LeftCross[0]))
             {
-                if (LeftCross[2]) // if bottom button is pressed
+                if (LeftCross[2]) // dolní tlačítko, otáčení hlavního ramene nahoru
                 {
                     inputs[2] = LeftCross[2];
                     inputs[0] = clockwise;
                 }
-                else if (LeftCross[0]) // if top button is pressed
+                else if (LeftCross[0]) // horní tlačítko, otáčení hlavního ramene dolů
                 {
                     inputs[2] = LeftCross[0];
                     inputs[0] = counter_clockwise;
@@ -130,12 +134,12 @@ namespace Robot_GUI
 
             if (!(RightButtons[3] && RightButtons[1]))
             {
-                if (RightButtons[3]) // if left button is pressed
+                if (RightButtons[3]) // levé tlačítko, zavřít chapadlo
                 {
                     inputs[3] = RightButtons[3];
                     inputs[0] = clockwise;
                 }
-                else if (RightButtons[1]) // if right button is pressed
+                else if (RightButtons[1]) // pravé tlačítko, otevřít chapadlo
                 {
                     inputs[3] = RightButtons[1];
                     inputs[0] = counter_clockwise;
@@ -144,12 +148,12 @@ namespace Robot_GUI
 
             if (!(RightButtons[2] && RightButtons[0]))
             {
-                if (RightButtons[2]) // if bottom button is pressed
+                if (RightButtons[2]) // dolní tlačítko, rameno s chapadlem dolů
                 {
                     inputs[4] = RightButtons[2];
                     inputs[0] = counter_clockwise;
                 }
-                else if (RightButtons[0]) // if top button is pressed
+                else if (RightButtons[0]) // horní tlačítko, rameno s chapadlem nahoru
                 {
                     inputs[4] = RightButtons[0];
                     inputs[0] = clockwise;

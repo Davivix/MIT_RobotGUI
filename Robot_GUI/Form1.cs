@@ -20,17 +20,16 @@ namespace Robot_GUI
         {
             InitializeComponent();
 
-            robot = new Robot("PCIE-1730,BID#0", "PCIE-1730_profile.xml",ref Debugger_window);
+            robot = new Robot("PCIE-1730,BID#0", "PCIE-1730_profile.xml");
             controller = new Controller();
             clock = new Clock(Update_Robot_Inputs);
-
 
             FormClosing += Form1_FormClosing;
         }
 
         private void Update_Robot_Inputs()
         {
-            // získání stavu vstupů uživatele
+            // získání stavu vstupů uživatele z herního ovladače
             bool[] user_inputs = new bool[5];
             user_inputs = controller.Return_Button_Data();
 
@@ -43,20 +42,13 @@ namespace Robot_GUI
 
             // zápis na výstup IO karty
             robot.Write_Input(next_input_value);
-            byte output_value = robot.Read_Output();
-
-            // Update UI
-            output.Invoke((MethodInvoker)delegate
-            {
-                output.Text = $"Aktuální hodnota na vstupu robota: {next_input_value}\r\nAktuální hodnota na výstupu robota: {0}\r\nInterval: {clock.Interval_ms * 2}ms\r\nFrekvence: {clock.Frequency}Hz";
-            });
         }
 
         private void Handle_Movement_Recording_Logic(byte next_input_value)
         {
             bool active_motors = Robot.Is_Any_Motor_Active(next_input_value, robot.Bits_Motors);
 
-            if (robot.Record_Initial_Position)
+            if (robot.Record_Initial_Position) // pokud ještě nebyl zaznamenán první stav
             {
                 if (active_motors)
                 {
@@ -73,7 +65,7 @@ namespace Robot_GUI
             }
 
             // Inkrementace počtu kroků robota pro zápis do souboru
-            // Krok nastane právě tehdy, když alespoň 1 motor je aktivní (ze 4 bitů) a zárověň došlo k sestupné hraně hodin.
+            // Krok nastane právě tehdy, když alespoň 1 motor je aktivní (ze 4 bitů)
             if (active_motors)
             {
                 if (!clock.ClockSignal)
@@ -83,7 +75,7 @@ namespace Robot_GUI
             bool motor_state_changed = Robot.Input_State_Changed(next_input_value, robot.Previous_Input_Value, robot.Bits_Motors);
             bool turning_direction_changed = Robot.Input_State_Changed(next_input_value, robot.Previous_Input_Value, Robot.Input_BitPos.Turning_direction);
 
-
+            // jestli se změnil stav
             if ((motor_state_changed || turning_direction_changed) && active_motors)
             {
                 FileManager.AppendLine(File_Path, $"{robot.Step_Count}");
@@ -112,12 +104,12 @@ namespace Robot_GUI
             if (Clock_Enable.Checked)
             {
                 clock.Start();
-                Debugger_Robot.Log("Clock started", ref Debugger_window, Color.White);
+                Debugger_Robot.Log("Hodiny zapnuty", ref Debugger_window, Color.White);
             }
             else
             {
                 clock.Stop();
-                Debugger_Robot.Log("Clock stopped", ref Debugger_window, Color.White);
+                Debugger_Robot.Log("Hodiny vypnuty", ref Debugger_window, Color.White);
             }
         }
 
@@ -125,7 +117,7 @@ namespace Robot_GUI
         {
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                (byte[] input_states, int[] step_counts) file_data = (null, null);
+                (byte[] input_states, int[] step_counts) file_data = (null, null); // tuple pro načtené data
                 try
                 {
                     file_data = FileManager.ReadFile(openFileDialog1.FileName);
@@ -139,7 +131,7 @@ namespace Robot_GUI
                 Debugger_Robot.Log("Data úspěšně načtena, provádím načtený pohyb", ref Debugger_window, Color.Lime);
                 Robot_cts = new CancellationTokenSource();
                 clock.Stop();
-                Set_Controls(false, sender);
+                Enable_GUI_Controls(false, sender);
 
                 try
                 {
@@ -152,7 +144,7 @@ namespace Robot_GUI
                 }
                 finally
                 {
-                    Set_Controls(true, sender);
+                    Enable_GUI_Controls(true, sender);
                     Robot_cts.Dispose();
                     Robot_cts = null;
                 }
@@ -167,14 +159,17 @@ namespace Robot_GUI
             {
                 if (saveFileDialog1.ShowDialog() == DialogResult.OK)
                 {
+                    // flag potřebný ve hlavný callback metodě, kde se rozhoduje jestli se bude zaznamenávat pohyb
                     robot.Recording_Movement = true;
+                    // flag potřebný pro zaznamenání prvního stavu při nahrávání pohybu, bez něj by program počítal kroky pro neznámý stav
                     robot.Record_Initial_Position = true;
-                    Set_Controls(false, sender);
+                    // vypne GUI ovládání
+                    Enable_GUI_Controls(false, sender);
 
                     robot.Step_Count = 0;
                     Movement_Record_btn.Text = "Ukončit nahrávání pohybu";
                     File_Path = saveFileDialog1.FileName;
-                    FileManager.SaveFile(File_Path, "");
+                    FileManager.SaveFile(File_Path, ""); // vypíše do souboru prazdný string. Pokud soubor neexistuje, vytvoří ho
                     Debugger_Robot.Log("Nahrávání pohybu spuštěno", ref Debugger_window, Color.Lime);
                 }
             }
@@ -182,9 +177,11 @@ namespace Robot_GUI
             {
                 robot.Recording_Movement = false;
                 Movement_Record_btn.Text = "Začít nahrávat pohyb";
-                Set_Controls(true, sender);
 
+                // zapne GUI ovládání
+                Enable_GUI_Controls(true, sender);
 
+                // na konec souboru vypíše počet kroků posledního stavu
                 FileManager.AppendLine(File_Path, $"{robot.Step_Count}");
 
                 robot.Step_Count = 0;
@@ -193,6 +190,7 @@ namespace Robot_GUI
             }
         }
 
+        // vytvoří nové okno s obrázkem
         private void Show_Manual_Click(object sender, EventArgs e)
         {
             Form manual_window = new Form
@@ -217,7 +215,7 @@ namespace Robot_GUI
 
         private async void Robot_Reset_Position_Click(object sender, EventArgs e)
         {
-            if (robot.Resetting_Position)
+            if (robot.Resetting_Position) // pokud se už robot resetuje do základní pozice => zruší operaci 
             {
                 if (Robot_cts != null && !Robot_cts.IsCancellationRequested)
                     Robot_cts.Cancel();
@@ -229,13 +227,14 @@ namespace Robot_GUI
             Reset_btn.Text = "Zastavit operaci";
 
             clock.Stop();
-            Set_Controls(false, sender);
-
+            Enable_GUI_Controls(false, sender);
+            // nová instance cancellationToken pro případne zrušení operace za provozu
             Robot_cts = new CancellationTokenSource();
+
+            Debugger_Robot.Log("Robot se nastavuje do původní polohy", ref Debugger_window, Color.Lime);
 
             try
             {
-                Debugger_Robot.Log("Robot se nastavuje do původní polohy", ref Debugger_window, Color.Lime);
                 await robot.Reset_Default_Position(clock.Interval_ms, Robot_cts.Token);
                 Debugger_Robot.Log("Robot byl úspěšně nastaven do původní polohy", ref Debugger_window, Color.Lime);
             }
@@ -251,11 +250,11 @@ namespace Robot_GUI
                 robot.Resetting_Position = false;
                 Reset_btn.Text = "Reset do základní pozice";
 
-                Set_Controls(true, sender);
+                Enable_GUI_Controls(true, sender);
             }
         }
 
-        private void Set_Controls(bool state, object sender)
+        private void Enable_GUI_Controls(bool state, object sender)
         {
             Button btn = (Button)sender;
 
@@ -276,13 +275,16 @@ namespace Robot_GUI
 
         private void On_KeyDown(object sender, KeyEventArgs e)
         {
+            // Event handler klávesnice pro zrušení operace (resetování pozice | opakování naučeného pohybu)
             if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Escape)
             {
                 if (Robot_cts != null && !Robot_cts.IsCancellationRequested)
                 {
                     Robot_cts.Cancel();
-                    Debugger_Robot.Log("Interrupt key pressed.", ref Debugger_window, Color.Red);
+                    Debugger_Robot.Log("Operace zrušena", ref Debugger_window, Color.Red);
                 }
+
+                clock.Stop();
             }
         }
 
@@ -294,10 +296,11 @@ namespace Robot_GUI
 
         private void Stop_Click(object sender, EventArgs e)
         {
+            // Event handler tlačítka pro zrušení operace (resetování pozice | opakování naučeného pohybu)
             if (Robot_cts != null && !Robot_cts.IsCancellationRequested)
             {
                 Robot_cts.Cancel();
-                Debugger_Robot.Log("Interrupt key pressed.", ref Debugger_window, Color.Red);
+                Debugger_Robot.Log("Operace zrušena.", ref Debugger_window, Color.Red);
             }
 
             clock.Stop();

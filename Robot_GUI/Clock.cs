@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace Robot_GUI
 {
-    internal class Clock : IDisposable
+    internal class Clock
     {
         // private
-        private CancellationTokenSource Clock_cts;
         private Action TickAction;
         private bool IsRunning;
-        private Stopwatch StopWatch;
+        private Timer Timer;
 
         // public
         public bool ClockSignal { get; private set; } = false;
@@ -22,31 +21,13 @@ namespace Robot_GUI
         public Clock(Action onTick)
         {
             TickAction = onTick;
-            StopWatch = new Stopwatch();
+            Timer = new Timer(Ontick, null, Timeout.Infinite, Timeout.Infinite);
         }
 
-        private async Task RunLoopAsync(CancellationToken token)
+        private void Ontick(object state)
         {
-            double nextTick = 0;
-            StopWatch.Restart();
-
-            while (!token.IsCancellationRequested)
-            {
-                double elapsed = StopWatch.Elapsed.TotalMilliseconds;
-
-                if (elapsed >= nextTick)
-                {
-                    ClockSignal = !ClockSignal;
-                    TickAction.Invoke();
-
-                    nextTick += Interval_ms;
-                }
-
-                // Sleep a tiny bit to reduce CPU usage
-                await Task.Delay(1, token).ConfigureAwait(false);
-            }
-
-            StopWatch.Stop();
+            ClockSignal = !ClockSignal;
+            TickAction.Invoke();
         }
 
         public void SetFrequency(double hz)
@@ -59,58 +40,29 @@ namespace Robot_GUI
 
             Frequency = hz;
             Interval_ms = (int)(1000.0 / hz / 2);
+
+            if (IsRunning)
+                Timer.Change(0, Interval_ms);
         }
 
         public void Start()
         {
-            if (IsRunning)
-                return;
-
+            Timer.Change(0, Interval_ms);
             IsRunning = true;
-            Clock_cts = new CancellationTokenSource();
-            Task.Run(() => RunLoopAsync(Clock_cts.Token));
+
         }
 
         public void Stop()
         {
-            if (!IsRunning)
-                return;
-
             IsRunning = false;
-            Clock_cts.Cancel();
-            Clock_cts.Dispose();
-            Clock_cts = null;
+            Timer.Change(Timeout.Infinite, Timeout.Infinite);
         }
 
         public void Dispose()
         {
             Stop();
-            StopWatch = null;
+            Timer.Dispose();
             TickAction = null;
-        }
-    }
-
-    public static class Precision
-    {
-        public static async Task DelayAsync(int targetMilliseconds, CancellationToken token)
-        {
-            var sw = Stopwatch.StartNew();
-            long targetTicks = (long)(targetMilliseconds * (Stopwatch.Frequency / 1000.0));
-
-            // Main wait loop
-            while (sw.ElapsedTicks < targetTicks)
-            {
-                token.ThrowIfCancellationRequested();
-
-                // Remaining time in milliseconds
-                double remainingMs = (targetTicks - sw.ElapsedTicks) / (Stopwatch.Frequency / 1000.0);
-
-                // Sleep briefly if enough time left, spin if very close
-                if (remainingMs > 2)
-                    await Task.Delay(1, token).ConfigureAwait(false);
-                else
-                    Thread.SpinWait(1000);
-            }
         }
     }
 }
